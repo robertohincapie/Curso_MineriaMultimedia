@@ -1,6 +1,6 @@
 # Contenidos del Curso — Analítica de Datos No Estructurados
 
-# Unidad 1 — Fundamentos de Deep Learning para Datos No Estructurados [Libro 1](../Unidad%201/Unidad%201.md)
+# Unidad 1 — Fundamentos de Deep Learning para Datos No Estructurados [Libro 1](./Unidad%201/unidad_1.md)
 ## Idea central
 Los datos no estructurados requieren nuevas representaciones y modelos capaces de aprender directamente desde imágenes, texto, audio y video.
 ## Pregunta guía
@@ -19,7 +19,7 @@ Los datos no estructurados requieren nuevas representaciones y modelos capaces d
 - Regularización y dropout
 - Evaluación y generalización
 
-# Unidad 2 — Analítica Visual: Imágenes como Datos [Libro 2](../Unidad%202/Unidad%202.md)
+# Unidad 2 — Analítica Visual: Imágenes como Datos [Libro 2](./Unidad%202/unidad_2.md)
 ## Idea central
 Las imágenes contienen información espacial compleja que puede transformarse en conocimiento mediante representaciones jerárquicas.
 ## Pregunta guía
@@ -36,7 +36,7 @@ Las imágenes contienen información espacial compleja que puede transformarse e
 - Búsqueda por similitud visual
 - Introducción a modelos multimodales
 
-# Unidad 3 — Procesamiento de Lenguaje Natural [Libro 3](../Unidad%203/Unidad%203.md)
+# Unidad 3 — Procesamiento de Lenguaje Natural [Libro 3](./Unidad%203/Unidad_3.md)
 ## Idea central
 El lenguaje humano puede representarse matemáticamente para extraer significado, conocimiento y contexto.
 ## Pregunta guía
@@ -54,7 +54,7 @@ El lenguaje humano puede representarse matemáticamente para extraer significado
 - Large Language Models (LLM)
 - Prompt Engineering
 
-# Unidad 4 — Sistemas Inteligentes para Datos No Estructurados [Libro 4](../Unidad%204/Unidad%204.md)
+# Unidad 4 — Sistemas Inteligentes para Datos No Estructurados [Libro 4](./Unidad%204/Unidad_4.md)
 ## Idea central
 Los modelos individuales generan valor cuando se integran dentro de sistemas completos de recuperación, razonamiento y apoyo a la decisión.
 ## Pregunta guía
