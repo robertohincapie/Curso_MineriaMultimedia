@@ -1946,9 +1946,6 @@ Continuar Contador +1
         Detener
 ```
 
-Miremos este libro que presenta el modelo de overfitting descrito anteriormente
-[Libro overfitting en entrenamiento de imágenes](./ejemplo_overfitting.ipynb)
-
 ---
 
 ### Dropout
