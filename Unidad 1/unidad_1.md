@@ -1,4 +1,4 @@
-# Unidad 1 — Fundamentos de Deep Learning para Datos No Estructurados
+# Unidad 1 — Fundamentos de Deep Learning
 
 ## Idea central
 Comprender cómo entrenar modelos neuronales modernos para procesar datos no estructurados.
@@ -181,6 +181,9 @@ Miraremos conceptualmente un modelo de una red neuronal, que próximanente enten
 
 Las redes neuronales son un modelo computacional inspirado en el funcionamiento del cerebro humano. Se utilizan en el campo de la inteligencia artificial para realizar tareas específicas, como reconocimiento de patrones, clasificación, regresión, procesamiento de lenguaje natural y muchas otras aplicaciones. 
 
+<p align="center">
+    <img src="imagenes/redes_neuronales.png" width="600">
+</p>
 Estas redes están compuestas por unidades llamadas "neuronas" que están interconectadas y organizadas en capas. Cada conexión entre neuronas tiene un peso que determina la fuerza de la conexión. La información fluye a través de la red desde la capa de entrada, a través de las capas ocultas (si las hay) y finalmente hacia la capa de salida. Durante este proceso, las neuronas aplican funciones de activación a la entrada ponderada para producir una salida. 
 
 El aprendizaje en una red neuronal se logra mediante un proceso llamado retropropagación (backpropagation). Este proceso ajusta los pesos de las conexiones en función de la diferencia entre la salida predicha y la salida deseada. Se utiliza un algoritmo de optimización para minimizar esta diferencia y mejorar el rendimiento de la red. 
@@ -217,6 +220,9 @@ Las redes neuronales constituyen uno de los modelos más importantes del aprendi
 
 Inspiradas de manera simplificada en el funcionamiento del cerebro humano, las redes neuronales están formadas por unidades de procesamiento interconectadas llamadas neuronas artificiales. Al combinar múltiples neuronas y capas, estas redes son capaces de aproximar funciones altamente complejas y resolver problemas de clasificación, regresión, visión por computador y procesamiento de lenguaje natural.
 
+<p align="center">
+    <img src="imagenes/neurona.jpg" width="600">
+</p>
 ---
 
 ## Neurona artificial
@@ -913,6 +919,9 @@ donde:
 - \(\eta\) es la tasa de aprendizaje (*learning rate*);
 - \(\nabla L\) es el gradiente de la pérdida.
 
+<p align="center">
+    <img src="imagenes/gradient_descent.jpg" width="400">
+</p>
 ---
 
 ##### Algoritmos comunes
@@ -1821,20 +1830,9 @@ De forma análoga, un modelo sobreajustado funciona muy bien sobre los datos con
 
 #### Representación gráfica
 
-```text
-Error
-  ^
-  |
-  | \ entrenamiento
-  |  \
-  |   \
-  |    \____
-  |
-  |      \ validación
-  |       \
-  |        \______
-  +--------------------> Épocas
-```
+<p align="center">
+    <img src="imagenes/overfitting.png" width="600">
+</p>
 
 Inicialmente ambos errores disminuyen.
 
@@ -1947,6 +1945,9 @@ Continuar Contador +1
              ↓
         Detener
 ```
+
+Miremos este libro que presenta el modelo de overfitting descrito anteriormente
+[Libro overfitting en entrenamiento de imágenes](./ejemplo_overfitting.ipynb)
 
 ---
 
