@@ -2926,27 +2926,19 @@ Miremos el ejemplo de transfer learning en [este libro](./transfer_learning.ipyn
 
 Mirar este libro [Proceso completo](./ejemplo_entrenamiento_completo.ipynb)
 
-### 6. Detección de objetos
+# Otros problemas de procesamiento de imágenes
+
+## Detección de objetos
 - Bounding Boxes
 - YOLO
 - Casos de uso
 
-### 7. Segmentación
+## Segmentación
 - Segmentación semántica
 - U-Net
 - Segment Anything Model (SAM)
 
-### 8. Embeddings visuales
+## Embeddings visuales
 - Espacios latentes
 - Similaridad visual
 - Recuperación basada en contenido
-
-### 9. Multimodalidad
-- CLIP
-- Imagen + Texto
-
-## Pipeline de referencia
-Imagen → Preprocesamiento → CNN → Representación → Clasificación/Detección/Segmentación → Evaluación
-
-## Proyecto sugerido
-Sistema de clasificación visual o búsqueda por similitud de imágenes.

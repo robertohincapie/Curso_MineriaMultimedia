@@ -41,7 +41,7 @@ Los tensores pueden poseer cualquier número de dimensiones:
 | Matriz | 2D |
 | Tensor | nD |
 
-En Deep Learning es común trabajar con tensores de tres, cuatro o incluso más dimensiones.
+En Deep Learning es común trabajar con tensores de tres, cuatro o incluso más dimensiones. Sin embargo, un tensor es una definición de un objeto de software que puede tener 0, 1 o más dimensiones. 
 
 Por ejemplo:
 
@@ -203,15 +203,6 @@ Ejemplos funcionales de redes neuronales:
 
 - Ejemplo más avanzado, comparando varios modelos para hacer una clasificación: [Libro 6](./libro6.ipynb)
 - Ejemplo de red neuronal para detectar dígitos: [Libro 7](./libro7.ipynb)
-
-
-REVISAR UBICACIÓN: GPU vs CPU: Cómo el uso de la GPU acelera el trabajo de las redes neuronales: [Video: ](https://www.youtube.com/watch?v=OBxUEv6JZ-M)
-
-Ejemplo del modelo sin GPU: [Libro modelo con CPU](./modelo_cpu.ipynb). 
-Ejemplo del modelo con GPU: [Libro modelo con GPU](./modelo_gpu.ipynb)
-
-REVISAR: Conexión a Drive, carga y descarga de un modelo 
-
 
 
 ## Redes neuronales básicas
@@ -782,7 +773,7 @@ f(X)\approx Y
 que permita predecir correctamente nuevas observaciones.
 
 ---
-#### Funciones de pérdida
+#### Funciones de error o pérdida
 
 Para aprender, la red necesita medir qué tan buena o mala es una predicción.
 
@@ -803,7 +794,7 @@ El objetivo del entrenamiento es minimizar esta pérdida.
 
 ---
 
-#### Error Cuadrático Medio (MSE)
+##### Error Cuadrático Medio (MSE)
 
 El Error Cuadrático Medio (*Mean Squared Error*) es ampliamente utilizado en problemas de regresión.
 
@@ -840,7 +831,7 @@ criterion = nn.MSELoss()
 
 ---
 
-#### Cross Entropy
+##### Cross Entropy
 
 La entropía cruzada (*Cross Entropy*) es la función de pérdida más utilizada en clasificación.
 
@@ -1428,7 +1419,7 @@ donde:
 
 ---
 
-#### Ciclo completo de aprendizaje
+### Ciclo completo de aprendizaje
 
 ```text
 Datos
@@ -1867,7 +1858,7 @@ Modelo que presenta un proceso de earlyStop para controlar el overfitting [Libro
 
 ---
 
-### Early Stopping
+#### Early Stopping
 
 El **Early Stopping** es una técnica que detiene automáticamente el entrenamiento cuando el desempeño sobre el conjunto de validación deja de mejorar.
 
@@ -1875,7 +1866,7 @@ La idea es evitar que el modelo continúe aprendiendo ruido presente en los dato
 
 ---
 
-#### Funcionamiento
+##### Funcionamiento
 
 Durante el entrenamiento se monitorea una métrica de validación:
 
@@ -1898,7 +1889,7 @@ Por ejemplo:
 
 ---
 
-#### Paciencia (*patience*)
+##### Paciencia (*patience*)
 
 El parámetro más importante es:
 
@@ -1918,7 +1909,7 @@ Valores comunes:
 
 ---
 
-#### Ventajas
+##### Ventajas
 
 - Reduce overfitting.
 - Disminuye tiempo de entrenamiento.
@@ -1926,7 +1917,7 @@ Valores comunes:
 
 ---
 
-#### Flujo conceptual
+##### Flujo conceptual
 
 ```text
 Entrenamiento
@@ -1948,7 +1939,7 @@ Continuar Contador +1
 
 ---
 
-### Dropout
+#### Dropout
 
 El **Dropout** es una técnica de regularización ampliamente utilizada en Deep Learning.
 
@@ -1958,7 +1949,7 @@ De esta forma, la red no puede depender excesivamente de un conjunto reducido de
 
 ---
 
-#### Ejemplo conceptual
+##### Ejemplo conceptual
 
 Red completa:
 
@@ -1984,7 +1975,7 @@ Las neuronas marcadas con **X** son ignoradas temporalmente.
 
 ---
 
-#### Probabilidad de Dropout
+##### Probabilidad de Dropout
 
 Generalmente se especifica una probabilidad:
 
@@ -2004,7 +1995,7 @@ Valores comunes:
 
 ---
 
-#### Entrenamiento vs inferencia
+##### Entrenamiento vs inferencia
 
 Es importante notar que:
 
@@ -2020,7 +2011,7 @@ model.eval()
 
 ---
 
-#### Implementación en PyTorch
+##### Implementación en PyTorch
 
 ```python
 nn.Dropout(p=0.5)
@@ -2028,7 +2019,7 @@ nn.Dropout(p=0.5)
 
 ---
 
-### Weight Decay
+#### Weight Decay
 
 El **Weight Decay** es una técnica de regularización que penaliza pesos excesivamente grandes.
 
@@ -2058,7 +2049,7 @@ Regularización L2
 
 ---
 
-#### Interpretación intuitiva
+##### Interpretación intuitiva
 
 Sin regularización:
 
@@ -2078,7 +2069,7 @@ pesos moderados
 
 ---
 
-#### Implementación en PyTorch
+##### Implementación en PyTorch
 
 ```python
 optimizer = torch.optim.Adam(
@@ -2092,7 +2083,7 @@ El optimizador incorpora automáticamente la penalización durante el entrenamie
 
 ---
 
-### Estrategias modernas de generalización
+#### Estrategias modernas de generalización
 
 En la práctica, los modelos modernos suelen combinar múltiples técnicas simultáneamente:
 
@@ -2107,7 +2098,7 @@ El objetivo final es construir modelos que no solo aprendan los datos disponible
 
 ---
 
-### Resumen
+#### Resumen
 
 | Problema o técnica | Objetivo |
 |-------------------|----------|
@@ -2470,4 +2461,404 @@ Respuesta fundamentada
 
 Así, el aprendizaje profundo moderno debe entenderse no como una colección de modelos aislados, sino como la construcción de pipelines capaces de convertir datos en conocimiento y conocimiento en decisiones.
 
+# Uso de GPU en Aprendizaje Profundo
 
+Uno de los factores que más ha contribuido al éxito reciente del aprendizaje profundo no ha sido únicamente el desarrollo de nuevos algoritmos, sino también el enorme incremento de la capacidad computacional disponible. Modelos que hace algunos años requerían semanas o incluso meses de entrenamiento hoy pueden entrenarse en cuestión de horas gracias al uso de unidades de procesamiento gráfico o **GPU** (*Graphics Processing Unit*).
+
+Aunque inicialmente fueron diseñadas para generar gráficos y videojuegos, las GPU resultaron especialmente eficientes para ejecutar el tipo de operaciones matemáticas que predominan en las redes neuronales profundas.
+
+---
+
+## ¿Por qué las redes neuronales requieren tanto poder computacional?
+
+Una red neuronal realiza millones de operaciones matemáticas durante cada iteración de entrenamiento.
+
+Cada capa debe calcular productos matriciales entre:
+
+- los datos de entrada;
+- los pesos de la red;
+- los gradientes calculados durante la retropropagación.
+
+Por ejemplo, una capa completamente conectada puede representarse como
+
+\[
+\mathbf{y}=\mathbf{W}\mathbf{x}+\mathbf{b}
+\]
+
+donde
+
+- \(\mathbf{x}\) representa el vector de entrada;
+- \(\mathbf{W}\) contiene los pesos de la red;
+- \(\mathbf{b}\) corresponde al sesgo (*bias*).
+
+Durante el entrenamiento estas operaciones deben repetirse millones de veces para todos los ejemplos del conjunto de datos.
+
+En redes convolucionales la situación es aún más exigente. Cada filtro debe aplicarse repetidamente sobre miles de imágenes, generando millones de multiplicaciones y sumas.
+
+En consecuencia, el tiempo de entrenamiento depende en gran medida de la velocidad con la que el hardware pueda realizar operaciones matriciales.
+
+---
+
+## CPU y GPU
+
+Aunque ambos dispositivos ejecutan programas, fueron diseñados con objetivos muy diferentes.
+
+<center>
+<img src='./imagenes/gpu-cpu.png' width=600>
+</center>
+
+### CPU
+
+La **CPU** (*Central Processing Unit*) constituye el procesador principal del computador.
+
+Está optimizada para ejecutar tareas generales.
+
+Normalmente posee entre
+
+- 4 y 24 núcleos
+
+en computadores personales modernos.
+
+Cada núcleo es muy potente y capaz de ejecutar instrucciones complejas, administrar memoria, controlar dispositivos y ejecutar múltiples procesos del sistema operativo.
+
+La CPU resulta ideal para:
+
+- ejecutar programas generales;
+- controlar el sistema operativo;
+- realizar cálculos secuenciales;
+- administrar archivos y dispositivos.
+
+Sin embargo, las operaciones masivamente paralelas no constituyen su punto fuerte.
+
+---
+
+### GPU
+
+La **GPU** (*Graphics Processing Unit*) fue diseñada para realizar simultáneamente miles de operaciones similares.
+
+En lugar de disponer de pocos núcleos muy complejos, una GPU moderna puede contener varios miles de núcleos relativamente sencillos.
+
+Por ejemplo, una tarjeta gráfica NVIDIA actual puede incorporar varios miles de núcleos CUDA trabajando en paralelo.
+
+Esta arquitectura resulta extraordinariamente eficiente cuando la misma operación debe repetirse sobre grandes cantidades de datos.
+
+Las redes neuronales presentan precisamente esta característica.
+
+Miles de neuronas realizan simultáneamente operaciones muy similares sobre grandes matrices de datos.
+
+Por esta razón, las GPU aceleran enormemente el entrenamiento de modelos de aprendizaje profundo.
+
+---
+
+## CPU versus GPU
+
+De forma simplificada, ambas arquitecturas pueden compararse así.
+
+|CPU|GPU|
+|---|---|
+|Pocos núcleos muy potentes|Miles de núcleos más sencillos|
+|Optimizada para tareas generales|Optimizada para procesamiento paralelo|
+|Excelente para lógica y control|Excelente para álgebra matricial|
+|Menor rendimiento en multiplicaciones masivas|Muy alto rendimiento en operaciones matriciales|
+
+En otras palabras, mientras la CPU destaca por su capacidad para ejecutar tareas diversas, la GPU sobresale cuando un mismo cálculo debe repetirse miles o millones de veces.
+
+---
+
+## La importancia de las operaciones matriciales
+
+Gran parte del entrenamiento de una red neuronal consiste en multiplicar matrices y tensores.
+
+Por ejemplo, si un lote de entrenamiento contiene
+
+```text
+64 imágenes
+```
+
+cada una de tamaño
+
+```text
+3 × 224 × 224
+```
+
+la red debe realizar millones de multiplicaciones durante una única iteración.
+
+Estas operaciones pueden representarse como
+
+```text
+Tensor de entrada
+
+        ×
+
+Matriz de pesos
+
+        ↓
+
+Tensor de salida
+```
+
+Las GPU están específicamente diseñadas para realizar este tipo de cálculos de forma masivamente paralela.
+
+Por ello, es habitual encontrar aceleraciones de un orden de magnitud o incluso superiores respecto al uso exclusivo de CPU, especialmente en modelos grandes y conjuntos de datos extensos.
+
+<center>
+<img src='./imagenes/matrix_prod.png' width=600>
+</center>
+
+---
+
+## CUDA
+
+Para que un programa pueda utilizar una GPU no basta con disponer del hardware.
+
+Es necesario contar con un conjunto de bibliotecas capaces de comunicarse con la tarjeta gráfica.
+
+En el caso de las GPU NVIDIA, esta plataforma recibe el nombre de **CUDA** (*Compute Unified Device Architecture*).
+
+CUDA proporciona un conjunto de herramientas que permiten a bibliotecas como PyTorch ejecutar operaciones directamente sobre la GPU.
+
+Entre sus componentes se encuentran:
+
+- controladores (*drivers*);
+- compiladores;
+- bibliotecas matemáticas altamente optimizadas;
+- rutinas especializadas para álgebra lineal y aprendizaje profundo.
+
+Gracias a CUDA, operaciones que podrían tardar varios segundos en CPU pueden ejecutarse en fracciones de segundo utilizando la GPU.
+
+---
+
+## PyTorch con o sin soporte CUDA
+
+PyTorch puede instalarse de dos formas.
+
+### Versión para CPU
+
+Esta versión únicamente utiliza el procesador principal del computador.
+
+Resulta suficiente para:
+
+- aprendizaje;
+- modelos pequeños;
+- pruebas de funcionamiento;
+- computadores sin tarjeta gráfica NVIDIA.
+
+En este caso todas las operaciones se ejecutan sobre la CPU.
+
+---
+
+### Versión con soporte CUDA
+
+Cuando el computador dispone de una GPU NVIDIA compatible, puede instalarse una versión de PyTorch compilada con soporte CUDA.
+
+Esta versión permite que las operaciones matemáticas se ejecuten directamente sobre la GPU.
+
+El código del programa prácticamente no cambia.
+
+Sin embargo, el tiempo de entrenamiento puede reducirse considerablemente.
+
+La instalación debe ser compatible con la versión de CUDA instalada en el sistema.
+
+Por esta razón, el sitio oficial de PyTorch ofrece diferentes variantes para distintas versiones de CUDA.
+
+---
+
+## ¿Cómo saber si PyTorch reconoce la GPU?
+
+PyTorch proporciona una función muy sencilla para comprobar si existe una GPU disponible.
+
+```python
+import torch
+
+print(torch.cuda.is_available())
+```
+
+Si el resultado es
+
+```python
+True
+```
+
+significa que PyTorch ha detectado correctamente una GPU compatible.
+
+También puede consultarse el nombre del dispositivo.
+
+```python
+print(torch.cuda.get_device_name(0))
+```
+
+Por ejemplo,
+
+```text
+NVIDIA GeForce RTX 4070
+```
+
+---
+
+## El concepto de dispositivo (*device*)
+
+En PyTorch, todos los datos se almacenan en un **dispositivo**.
+
+Este dispositivo puede ser
+
+```text
+CPU
+```
+
+o bien
+
+```text
+GPU
+```
+
+Un aspecto fundamental consiste en que **todos los elementos que participan en una operación deben encontrarse en el mismo dispositivo**.
+
+Esto incluye:
+
+- el modelo;
+- las imágenes de entrada;
+- las etiquetas;
+- las respuestas calculadas por la red.
+
+No es posible multiplicar un tensor almacenado en CPU por un modelo ubicado en GPU.
+
+PyTorch generará un error indicando que los tensores pertenecen a dispositivos diferentes.
+
+---
+
+## Selección del dispositivo
+
+Normalmente el dispositivo se selecciona automáticamente.
+
+```python
+device = torch.device(
+
+    "cuda"
+
+    if torch.cuda.is_available()
+
+    else "cpu"
+
+)
+```
+
+De esta manera el mismo programa puede ejecutarse tanto en computadores con GPU como en aquellos que únicamente disponen de CPU.
+
+---
+
+## Enviar el modelo a la GPU
+
+Una vez seleccionado el dispositivo, el modelo debe trasladarse explícitamente.
+
+```python
+modelo = modelo.to(device)
+```
+
+A partir de ese momento todos los parámetros de la red quedan almacenados en la GPU.
+
+---
+
+## Enviar los datos a la GPU
+
+No basta con mover el modelo.
+
+También deben trasladarse las imágenes y las etiquetas utilizadas durante el entrenamiento.
+
+Por ejemplo,
+
+```python
+imagenes = imagenes.to(device)
+
+etiquetas = etiquetas.to(device)
+```
+
+Ahora tanto el modelo como los datos se encuentran en el mismo dispositivo.
+
+---
+
+## Obtener las respuestas
+
+La salida producida por el modelo también permanecerá en la GPU.
+
+```python
+salidas = modelo(imagenes)
+```
+
+En este caso, el tensor `salidas` también reside en la GPU.
+
+Si posteriormente se desea convertir estas respuestas a arreglos de NumPy o visualizarlas mediante otras bibliotecas, primero deben copiarse nuevamente a la CPU.
+
+```python
+salidas_cpu = salidas.cpu()
+```
+
+o
+
+```python
+predicciones = salidas.cpu().numpy()
+```
+
+Este paso resulta necesario porque NumPy únicamente trabaja con datos almacenados en la memoria principal del computador.
+
+---
+
+## Flujo completo utilizando GPU
+
+El procedimiento habitual puede resumirse mediante el siguiente esquema.
+
+```text
+Seleccionar dispositivo
+            │
+            ▼
+      torch.device(...)
+            │
+            ▼
+Mover el modelo
+            │
+            ▼
+modelo.to(device)
+            │
+            ▼
+Mover imágenes y etiquetas
+            │
+            ▼
+imagenes.to(device)
+
+etiquetas.to(device)
+            │
+            ▼
+Entrenamiento
+            │
+            ▼
+Predicciones
+            │
+            ▼
+Mover resultados a CPU (si es necesario)
+```
+
+Obsérvese que todas las operaciones matemáticas importantes ocurren dentro de la GPU.
+
+La CPU continúa ejecutando el programa y administrando el sistema, mientras que la GPU realiza el procesamiento numérico intensivo.
+
+---
+
+## Resumen
+
+El entrenamiento de redes neuronales profundas requiere realizar millones de operaciones matriciales sobre grandes volúmenes de datos.
+
+Las GPU fueron diseñadas precisamente para ejecutar este tipo de operaciones de manera masivamente paralela, proporcionando aceleraciones muy significativas respecto al uso exclusivo de CPU.
+
+Para aprovechar este hardware, PyTorch utiliza la plataforma CUDA, que permite ejecutar las operaciones directamente sobre la tarjeta gráfica NVIDIA.
+
+Finalmente, es importante recordar una regla fundamental del desarrollo con PyTorch:
+
+> **Todos los elementos que participan en una operación deben encontrarse en el mismo dispositivo.**
+
+Por ello, durante el entrenamiento es necesario mover explícitamente el modelo, las imágenes, las etiquetas y cualquier otro tensor a la GPU antes de realizar los cálculos. Del mismo modo, cuando los resultados deban visualizarse o procesarse mediante otras bibliotecas, normalmente será necesario trasladarlos nuevamente a la CPU.
+
+Mirar este video explicativo [Video: ](https://www.youtube.com/watch?v=OBxUEv6JZ-M)
+
+Ejemplo del modelo sin GPU: [Libro modelo con CPU](./modelo_cpu.ipynb). 
+Ejemplo del modelo con GPU: [Libro modelo con GPU](./modelo_gpu.ipynb)
+
+REVISAR: Conexión a Drive, carga y descarga de un modelo 
