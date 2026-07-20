@@ -101,4 +101,4 @@
 ## Semana 16, 
 
 - Aplicación de los LLM
-- Trabajo final 25%
+- Trabajo final 20%
