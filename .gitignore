@@ -25,3 +25,5 @@ htmlcov/
 
 # PyTorch / model checkpoints
 *.pth
+Hotel Reservations.csv
+*.zip

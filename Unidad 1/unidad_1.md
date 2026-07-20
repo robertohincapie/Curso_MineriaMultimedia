@@ -1700,6 +1700,11 @@ Prueba
 
 Una adecuada gestión de datos es tan importante como la arquitectura del modelo y constituye una de las bases fundamentales de los sistemas modernos de Deep Learning.
 
+Miremos un primer libro que muestra cómo podemos entrenar con una red neuronal: [libro4.ipynb](./libro4.ipynb)
+
+Miremos también este libro un poco más completo: [libro5.ipynb](./libro5.ipynb)
+
+
 ## Generalización
 
 Uno de los principales objetivos del aprendizaje automático es construir modelos capaces de realizar buenas predicciones sobre datos que no han sido observados durante el entrenamiento.
