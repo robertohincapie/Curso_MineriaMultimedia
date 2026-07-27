@@ -1839,7 +1839,7 @@ Sin embargo, a partir de cierto punto:
 
 Ese es el inicio del overfitting.
 
-Modelo que presenta un proceso de earlyStop para controlar el overfitting [Libro de overfitting](./ejemplo_con_early_stop.ipynb)
+Modelo que presenta un proceso de earlyStop para controlar el overfitting [ejemplo_con_early_stop.ipynb](./ejemplo_con_early_stop.ipynb)
 
 ---
 
@@ -2117,7 +2117,7 @@ La generalización constituye uno de los principios más importantes del aprendi
 
 ## Pipeline completo
 
-REVISAR: Red neuronal aplicada en dos problemas de clasificación: [Libro de problemas de clasificación](./libro5.ipynb)
+REVISAR: Red neuronal aplicada en dos problemas de clasificación: [libro5.ipynb](./libro5.ipynb)
 
 Hasta este punto hemos estudiado múltiples conceptos: tensores, redes neuronales, funciones de activación, funciones de pérdida, optimización y gestión de datos. Sin embargo, uno de los objetivos centrales de este curso es comprender que el desarrollo de sistemas modernos de Inteligencia Artificial no se basa únicamente en modelos, sino en **pipelines completos de procesamiento de datos**.
 
