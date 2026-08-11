@@ -145,7 +145,7 @@ El número total de píxeles es:
 ```
 
 <center>
-<img src='./imagenes/spatial-resolution.png', width=400>
+<img src='./imagenes/spatial-resolution.png', width=600>
 </center>
 
 
@@ -195,7 +195,7 @@ donde:
 - 255 representa intensidad máxima.
 
 <center>
-<img src='./imagenes/color-cuantization.jpg', width=300>
+<img src='./imagenes/color-cuantization.jpg', width=600>
 </center>
 
 
@@ -262,7 +262,7 @@ Negro      = (0, 0, 0)
 ```
 
 <center>
-<img src='./imagenes/color-space.png', width=400>
+<img src='./imagenes/color-space.png', width=6400>
 </center>
 
 ### HSV
@@ -305,7 +305,7 @@ Canal B
 Cada canal es una matriz de intensidades.
 
 <center>
-<img src='./imagenes/RGB_channels_separation.png', width=400>
+<img src='./imagenes/RGB_channels_separation.png', width=600>
 </center>
 
 
