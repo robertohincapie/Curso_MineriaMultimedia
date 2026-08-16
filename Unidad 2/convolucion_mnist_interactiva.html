@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Laboratorio interactivo de convolución — MNIST</title>
+<style>
+:root{--bg:#0b1020;--panel:#121a2e;--panel2:#18233d;--text:#eaf0ff;--muted:#9fb0d0;--accent:#69d2ff;--accent2:#ffd166;--ok:#73e2a7;--line:#2a385c}
+*{box-sizing:border-box} body{margin:0;font-family:Inter,system-ui,Segoe UI,Arial,sans-serif;background:linear-gradient(135deg,#080c18,#101a32);color:var(--text);min-height:100vh}
+header{padding:22px 28px 10px;max-width:1450px;margin:auto} h1{font-size:clamp(24px,3vw,38px);margin:0 0 7px} header p{margin:0;color:var(--muted);max-width:1000px;line-height:1.45}
+.controls{max-width:1450px;margin:14px auto;padding:0 28px;display:flex;gap:14px;flex-wrap:wrap;align-items:end}.control{display:grid;gap:6px}.control label{font-size:12px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.08em}select,button{background:var(--panel2);color:var(--text);border:1px solid var(--line);border-radius:10px;padding:10px 13px;font-size:14px}button{cursor:pointer}.badge{padding:9px 12px;border:1px solid var(--line);background:#0e162a;border-radius:10px;color:var(--muted);font-size:13px}
+.main{max-width:1450px;margin:auto;padding:8px 28px 30px;display:grid;grid-template-columns:minmax(330px,1fr) 330px minmax(330px,1fr);gap:18px;align-items:start}.card{background:rgba(18,26,46,.94);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:0 18px 45px #0005}.card h2{font-size:17px;margin:0 0 5px}.sub{font-size:12px;color:var(--muted);margin-bottom:12px}.canvasWrap{position:relative;display:flex;justify-content:center;overflow:auto;background:#080d19;border-radius:12px;padding:10px;border:1px solid #263454}canvas{image-rendering:pixelated;touch-action:none;display:block}.legend{display:flex;gap:14px;margin-top:10px;color:var(--muted);font-size:12px;flex-wrap:wrap}.dot{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}.matrix{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin:12px auto;width:210px}.mcell{aspect-ratio:1;border-radius:8px;display:flex;align-items:center;justify-content:center;background:#0a1121;border:1px solid var(--line);font-weight:800;font-variant-numeric:tabular-nums}.formula{background:#09101f;border:1px solid var(--line);border-radius:12px;padding:12px;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:12px;line-height:1.55;overflow:auto;min-height:120px}.formula strong{color:var(--accent2)}.resultBig{font-size:27px;font-weight:900;color:var(--ok);margin:10px 0 2px}.mini{color:var(--muted);font-size:12px}.pixelGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-top:12px}.pcell{border:1px solid var(--line);border-radius:8px;text-align:center;padding:8px 2px;font-size:12px}.pcell b{display:block;font-size:15px;margin-bottom:2px}.explain{max-width:1450px;margin:0 auto 30px;padding:0 28px}.explain .card{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.step b{color:var(--accent)}.step{font-size:13px;line-height:1.5;color:var(--muted)}
+@media(max-width:1050px){.main{grid-template-columns:1fr}.explain .card{grid-template-columns:1fr}.matrix{width:180px}}
+</style>
+</head>
+<body>
+<header><h1>Convolución, píxel a píxel</h1><p>Elige un dígito y un kernel 3×3. La salida completa se calcula inmediatamente. Luego mueve el kernel sobre la imagen de entrada: verás los 9 píxeles usados, cada multiplicación y la celda correspondiente resaltada en el mapa resultante.</p></header>
+<div class="controls">
+ <div class="control"><label>Dígito</label><select id="digit"></select></div>
+ <div class="control"><label>Filtro / kernel</label><select id="filter"></select></div>
+ <div class="control"><label>Bordes</label><select id="padding"><option value="same">same (ceros)</option><option value="valid">valid</option></select></div>
+ <button id="reset">Centrar kernel</button><div class="badge">Entrada: 28×28 · Intensidad: 0…255</div><div class="badge" id="sumBadge"></div>
+</div>
+<section class="main">
+ <div class="card"><h2>1. Imagen de entrada</h2><div class="sub">Mueve el mouse. Cada celda es un píxel; el recuadro muestra el campo receptivo 3×3.</div><div class="canvasWrap"><canvas id="input" width="560" height="560"></canvas></div><div class="legend"><span><i class="dot" style="background:#69d2ff"></i>centro</span><span><i class="dot" style="background:#ffd166"></i>vecindad 3×3</span></div></div>
+ <div class="card"><h2>2. Operación local</h2><div class="sub" id="filterDesc"></div><div class="matrix" id="kernelMatrix"></div><div class="pixelGrid" id="pixelGrid"></div><div class="resultBig" id="resultBig"></div><div class="mini" id="coord"></div><div class="formula" id="formula"></div></div>
+ <div class="card"><h2>3. Mapa de características</h2><div class="sub">La convolución ya está calculada. La celda resaltada corresponde exactamente a la posición inspeccionada a la izquierda.</div><div class="canvasWrap"><canvas id="output" width="560" height="560"></canvas></div><div class="legend"><span><i class="dot" style="background:#73e2a7"></i>resultado local</span><span>Los valores se limitan a 0…255 solo para visualización.</span></div></div>
+</section>
+<section class="explain"><div class="card"><div class="step"><b>① Superponer</b><br>El kernel 3×3 se coloca sobre nueve píxeles vecinos de la imagen.</div><div class="step"><b>② Multiplicar y sumar</b><br>Cada píxel se multiplica por el peso que ocupa la misma posición en el kernel; luego se suman los nueve productos.</div><div class="step"><b>③ Desplazar</b><br>El kernel avanza una celda y repite la operación. El conjunto de resultados forma un nuevo mapa de características.</div></div></section>
+<script>
+const N=28, SCALE=20;
+// Diez muestras locales 28×28, generadas una sola vez al iniciar y conservadas en memoria.
+// El aspecto y escala reproducen el formato pedagógico de MNIST (grises, centrado, 28×28).
+function makeDigit(d){
+ const c=document.createElement('canvas'); c.width=c.height=N; const x=c.getContext('2d'); x.fillStyle='black';x.fillRect(0,0,N,N);
+ x.strokeStyle='white';x.fillStyle='white';x.lineCap='round';x.lineJoin='round';x.lineWidth=2.2;
+ // Trazos manuscritos deliberadamente irregulares para una lectura clara de los píxeles.
+ const P={
+ 0:[[9,5],[7,8],[6,14],[7,20],[10,23],[15,23],[19,20],[20,14],[19,8],[16,5],[11,5],[9,5]],
+ 1:[[10,9],[14,5],[14,23]],
+ 2:[[7,9],[9,6],[14,5],[18,7],[19,10],[17,13],[8,22],[20,22]],
+ 3:[[8,7],[12,5],[17,6],[19,9],[17,13],[13,14],[17,14],[20,17],[19,21],[15,23],[9,21]],
+ 4:[[18,23],[18,5],[7,17],[21,17]],
+ 5:[[19,6],[9,6],[8,13],[14,12],[18,14],[20,18],[18,22],[13,23],[8,21]],
+ 6:[[18,6],[13,5],[9,8],[7,14],[8,20],[12,23],[17,22],[20,18],[18,14],[14,13],[9,15]],
+ 7:[[7,6],[21,6],[16,12],[13,17],[11,23]],
+ 8:[[13,5],[9,6],[7,10],[9,13],[14,14],[18,12],[19,8],[16,5],[12,5],[9,8],[9,12],[7,17],[8,21],[12,23],[17,22],[20,18],[18,15],[14,14]],
+ 9:[[18,14],[14,15],[10,13],[8,9],[10,6],[15,5],[19,8],[20,14],[18,20],[14,23],[10,22]]};
+ const pts=P[d];x.beginPath();x.moveTo(...pts[0]);for(let i=1;i<pts.length;i++)x.lineTo(...pts[i]);x.stroke();
+ // antialiasing del canvas produce niveles de gris como los que conviene inspeccionar en clase
+ return Array.from(x.getImageData(0,0,N,N).data).filter((_,i)=>i%4===0);
+}
+const digits=Array.from({length:10},(_,d)=>makeDigit(d));
+const filters={
+ vertical:{name:'Línea vertical',k:[[0,1,0],[0,1,0],[0,1,0]].map(r=>r.map(v=>v/3)),desc:'Promedia los tres píxeles de una columna vertical.'},
+ horizontal:{name:'Línea horizontal',k:[[0,0,0],[1,1,1],[0,0,0]].map(r=>r.map(v=>v/3)),desc:'Promedia los tres píxeles de una fila horizontal.'},
+ square:{name:'Cuadrado (contorno)',k:[[1,1,1],[1,0,1],[1,1,1]].map(r=>r.map(v=>v/8)),desc:'Promedia el contorno de la vecindad, sin usar el píxel central.'},
+ xcross:{name:'Cruz diagonal (X)',k:[[1,0,1],[0,1,0],[1,0,1]].map(r=>r.map(v=>v/5)),desc:'Combina centro y diagonales; responde a estructuras diagonales.'},
+ plus:{name:'Cruz vertical/horizontal (+)',k:[[0,1,0],[1,1,1],[0,1,0]].map(r=>r.map(v=>v/5)),desc:'Combina centro con vecinos arriba, abajo, izquierda y derecha.'},
+ diffuse:{name:'Difusión gaussiana',k:[[1,2,1],[2,4,2],[1,2,1]].map(r=>r.map(v=>v/16)),desc:'Suavizado ponderado: da más peso al centro y difunde intensidades localmente.'}
+};
+const $=id=>document.getElementById(id), digitSel=$('digit'), filterSel=$('filter'), padSel=$('padding');
+for(let d=0;d<10;d++) digitSel.add(new Option('Dígito '+d,d)); Object.entries(filters).forEach(([id,f])=>filterSel.add(new Option(f.name,id)));
+digitSel.value=5;filterSel.value='vertical'; let pos={r:14,c:14}, out=[];
+function sample(img,r,c){return (r<0||c<0||r>=N||c>=N)?0:img[r*N+c]}
+function convolve(img,k){let a=new Array(N*N);for(let r=0;r<N;r++)for(let c=0;c<N;c++){let s=0;for(let kr=0;kr<3;kr++)for(let kc=0;kc<3;kc++)s+=sample(img,r+kr-1,c+kc-1)*k[kr][kc];a[r*N+c]=s}return a}
+function draw(canvas,data,highlight,isInput){const ctx=canvas.getContext('2d');ctx.clearRect(0,0,560,560);for(let r=0;r<N;r++)for(let c=0;c<N;c++){let v=Math.max(0,Math.min(255,data[r*N+c]));ctx.fillStyle=`rgb(${v},${v},${v})`;ctx.fillRect(c*SCALE,r*SCALE,SCALE,SCALE)}
+ ctx.strokeStyle='#263454';ctx.lineWidth=.35;for(let i=0;i<=N;i++){ctx.beginPath();ctx.moveTo(i*SCALE,0);ctx.lineTo(i*SCALE,560);ctx.stroke();ctx.beginPath();ctx.moveTo(0,i*SCALE);ctx.lineTo(560,i*SCALE);ctx.stroke()}
+ if(highlight){if(isInput){ctx.fillStyle='#ffd16633';ctx.fillRect((highlight.c-1)*SCALE,(highlight.r-1)*SCALE,3*SCALE,3*SCALE);ctx.strokeStyle='#ffd166';ctx.lineWidth=2.5;ctx.strokeRect((highlight.c-1)*SCALE+1,(highlight.r-1)*SCALE+1,3*SCALE-2,3*SCALE-2);ctx.strokeStyle='#69d2ff';ctx.lineWidth=3;ctx.strokeRect(highlight.c*SCALE+2,highlight.r*SCALE+2,SCALE-4,SCALE-4)}else{ctx.fillStyle='#73e2a744';ctx.fillRect(highlight.c*SCALE,highlight.r*SCALE,SCALE,SCALE);ctx.strokeStyle='#73e2a7';ctx.lineWidth=3;ctx.strokeRect(highlight.c*SCALE+2,highlight.r*SCALE+2,SCALE-4,SCALE-4)}}}
+function renderKernel(k){$('kernelMatrix').innerHTML='';k.flat().forEach(v=>{let e=document.createElement('div');e.className='mcell';e.textContent=fmt(v);e.style.background=v?`rgba(105,210,255,${.10+.45*Math.abs(v)})`:'#0a1121';$('kernelMatrix').append(e)})}
+function fmt(x){if(Math.abs(x)<1e-9)return '0';for(const d of [3,5,8,9,16]){let n=x*d;if(Math.abs(n-Math.round(n))<1e-7)return Math.round(n)+'/'+d}return x.toFixed(3)}
+function updateDetail(){const img=digits[+digitSel.value],f=filters[filterSel.value],k=f.k;let products=[],sum=0;$('pixelGrid').innerHTML='';for(let kr=0;kr<3;kr++)for(let kc=0;kc<3;kc++){let p=sample(img,pos.r+kr-1,pos.c+kc-1),w=k[kr][kc],z=p*w;sum+=z;products.push(`${Math.round(p)}×${fmt(w)}`);let e=document.createElement('div');e.className='pcell';e.innerHTML=`<b>${Math.round(p)}</b>× ${fmt(w)}`;$('pixelGrid').append(e)}$('formula').innerHTML=products.join(' + ')+'<br>= <strong>'+sum.toFixed(2)+'</strong>';$('resultBig').textContent='Salida = '+sum.toFixed(2);$('coord').textContent=`Centro: fila ${pos.r}, columna ${pos.c} → salida[${pos.r}, ${pos.c}]`;draw($('input'),img,pos,true);draw($('output'),out,pos,false)}
+function recalc(){const img=digits[+digitSel.value],f=filters[filterSel.value];out=convolve(img,f.k);renderKernel(f.k);$('filterDesc').textContent=f.desc;$('sumBadge').textContent='Σ pesos = '+f.k.flat().reduce((a,b)=>a+b,0).toFixed(3)+' → no amplifica una región uniforme';updateDetail()}
+$('input').addEventListener('pointermove',e=>{const rect=e.currentTarget.getBoundingClientRect(),sx=560/rect.width,sy=560/rect.height;let c=Math.floor((e.clientX-rect.left)*sx/SCALE),r=Math.floor((e.clientY-rect.top)*sy/SCALE);if(padSel.value==='valid'){r=Math.max(1,Math.min(26,r));c=Math.max(1,Math.min(26,c))}else{r=Math.max(0,Math.min(27,r));c=Math.max(0,Math.min(27,c))}pos={r,c};updateDetail()});
+[digitSel,filterSel,padSel].forEach(e=>e.addEventListener('change',recalc));$('reset').onclick=()=>{pos={r:14,c:14};updateDetail()};recalc();
+</script>
+</body></html>

@@ -1411,6 +1411,8 @@ Otros detectarán regiones con determinados colores.
 
 Y otros terminarán reaccionando ante patrones mucho más complejos, como ojos, ruedas, ventanas o letras.
 
+Mire el comportamiento de los filtros de manera interactiva en el documento [convolucion_mnist_interactiva.html](./convolucion_mnist_interactiva.html)
+
 ---
 
 ## Pooling
