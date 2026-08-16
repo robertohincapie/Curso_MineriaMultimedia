@@ -1871,6 +1871,8 @@ Ahora la salida será
 
 Este cálculo permite diseñar arquitecturas completas sin necesidad de ejecutar el modelo.
 
+Puedes utilizar esta página de ayuda al proceso de cálculo de dimensiones a la salida de la operación: [calculadora_dimensiones_cnn.html](./calculadora_dimensiones_cnn.html)
+
 ---
 
 ### Cálculo del número de parámetros
