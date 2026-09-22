@@ -27,3 +27,8 @@ htmlcov/
 *.pth
 Hotel Reservations.csv
 *.zip
+
+# No guardar el modelo word2vec
+*.kv
+*.npy
+Unidad 3/PLN_Modelos_word2vec.ipynb
